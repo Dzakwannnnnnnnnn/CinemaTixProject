@@ -1,5 +1,7 @@
 <?php
+include_once("koneksi.php");
 
+$hasil = mysqli_query($mysqli, "SELECT * FROM film");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -31,7 +33,7 @@
       <div class="card mt-4">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5>Data Film</h5>
-          <button class="btn btn-primary btn-sm">+ Tambah Film</button>
+          <button class="btn btn-primary btn-sm" onclick="window.location.href='Tambah.php'">+ Tambah Film</button>
         </div>
         <div class="card-body">
           <table class="table table-striped">
@@ -46,19 +48,21 @@
                 <th>Aksi</th>
               </tr>
             </thead>
+            <?php while($barang = mysqli_fetch_array($hasil)): ?>
             <tbody>
               <tr>
-                <td>1</td>
-                <td>Avengers: Endgame</td>
-                <td>Action</td>
-                <td>180 menit</td>
-                <td>13+</td>
-                <td><img src="poster.jpg" width="50"></td>
+                <td><?= $id_film['film_id']?></td>
+                <td><?= $judul_film['judul']?></td>
+                <td><?= $genre_film['genre']?></td>
+                <td><?= $durasi_film['durasi']?></td>
+                <td><?= $ratingUsia_film['rating_usia']?></td>
+                <td><?= $poster_film['poster_url']?></td>
                 <td>
                   <button class="btn btn-warning btn-sm">Edit</button>
                   <button class="btn btn-danger btn-sm">Hapus</button>
                 </td>
               </tr>
+            <?php endwhile; ?>
             </tbody>
           </table>
         </div>
