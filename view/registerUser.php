@@ -2,21 +2,36 @@
 include 'koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama = $_POST['nama'];
-    $email = $_POST['email'];
+    // Sanitize input
+    $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $no_hp = mysqli_real_escape_string($conn, $_POST['no_hp']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $no_hp = $_POST['no_hp'];
     $role = 'user';
 
-    $sql = "INSERT INTO users (nama, email, password, no_hp, role)
-            VALUES ('$nama', '$email', '$password', '$no_hp', '$role')";
-
-    if (mysqli_query($conn, $sql)) {
-        echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location='login.html';</script>";
+    // Validasi email sudah ada
+    $check_email = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $check_email);
+    
+    if (mysqli_num_rows($result) > 0) {
+        $error = 'Email sudah terdaftar! Gunakan email lain.';
     } else {
-        echo "<script>alert('Terjadi kesalahan, coba lagi.'); window.location='register.html';</script>";
+        // Sesuai dengan structure table users di database
+        $sql = "INSERT INTO users (nama, email, password, no_hp, role)
+                VALUES ('$nama', '$email', '$password', '$no_hp', '$role')";
+
+        if (mysqli_query($conn, $sql)) {
+            echo "<script>
+                alert('Registrasi berhasil! Silakan login.');
+                window.location='loginUser.php';
+            </script>";
+            exit;
+        } else {
+            $error = 'Terjadi kesalahan: ' . mysqli_error($conn);
+        }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -175,6 +190,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       text-decoration: underline;
     }
 
+    /* Error Message */
+    .error-message {
+      background-color: #ffebee;
+      color: #c62828;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      border-left: 4px solid #c62828;
+      text-align: center;
+    }
+
   </style>
 </head>
 <body>
@@ -183,13 +209,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="logo">Cinematix</div>
     <nav>
       <ul class="nav-links">
-        <li><a href="#">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li><a href="#">Pemesanan Tiket</a></li>
         <li><a href="#">Sedang Tayang</a></li>
         <li><a href="#">Berita & Event</a></li>
       </ul>
     </nav>
-    <a href="login.html" class="btn-login">Masuk</a>
+    <a href="loginUser.php" class="btn-login">Masuk</a>
   </header>
 
   <!-- Register Section -->
@@ -197,25 +223,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="register-box">
       <h2>Buat Akun Baru</h2>
 
-      <form action="proses_register.php" method="POST">
+      <?php if (isset($error)): ?>
+        <div class="error-message"><?php echo $error; ?></div>
+      <?php endif; ?>
+
+      <form action="" method="POST">
         <div class="input-group">
           <label for="nama">Nama Lengkap</label>
-          <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+          <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" 
+                 value="<?php echo isset($_POST['nama']) ? htmlspecialchars($_POST['nama']) : ''; ?>" required>
         </div>
 
         <div class="input-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="Masukkan email aktif" required>
+          <input type="email" id="email" name="email" placeholder="Masukkan email aktif" 
+                 value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required>
         </div>
 
         <div class="input-group">
           <label for="password">Kata Sandi</label>
-          <input type="password" id="password" name="password" placeholder="Buat kata sandi" required>
+          <input type="password" id="password" name="password" placeholder="Buat kata sandi (min. 6 karakter)" required>
         </div>
 
         <div class="input-group">
           <label for="no_hp">No. Handphone</label>
-          <input type="text" id="no_hp" name="no_hp" placeholder="Masukkan nomor HP" required>
+          <input type="text" id="no_hp" name="no_hp" placeholder="Masukkan nomor HP" 
+                 value="<?php echo isset($_POST['no_hp']) ? htmlspecialchars($_POST['no_hp']) : ''; ?>" required>
         </div>
 
         <button type="submit" class="btn-submit">Daftar Sekarang</button>
