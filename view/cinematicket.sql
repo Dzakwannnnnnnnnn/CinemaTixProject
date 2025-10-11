@@ -119,7 +119,8 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `no_hp` varchar(20) NOT NULL,
-  `role` enum('admin','user') DEFAULT 'user'
+  `role` enum('admin','user') DEFAULT 'user',
+  'photo_profile' varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
