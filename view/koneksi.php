@@ -1,9 +1,10 @@
 <?php
 // koneksi.php dengan error handling yang better
 $host = "192.168.1.6";
-$user = "root";
-$pass = "Dzakwann033";  // Coba kosong dulu
+$user = "cinematik_user"; // ← PERHATIKAN: cinematik_user BUKAN cinematic_user
+$pass = "password123";
 $db = "cinematicket";
+
 
 try {
     $conn = mysqli_connect($host, $user, $pass, $db);
