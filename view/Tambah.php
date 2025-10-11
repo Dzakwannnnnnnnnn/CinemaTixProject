@@ -70,7 +70,6 @@ if (isset($_POST['submit'])) {
       </ul>
     </nav>
 
-    <!-- Main Content -->
     <div class="container-fluid p-4">
       <h2>Tambah Film</h2>
       <p>Isi form di bawah untuk menambahkan film baru ke database CinemaTix.</p>
@@ -104,7 +103,7 @@ if (isset($_POST['submit'])) {
             <input type="text" class="form-control" id="poster" name="poster" placeholder="https://example.com/poster.jpg">
           </div>
           <button type="submit" name="submit" class="btn btn-primary">Simpan</button>
-          <a href="film.php" class="btn btn-secondary">Kembali</a>
+          <a href="panelAdmin.php" class="btn btn-secondary">Kembali</a>
         </form>
       </div>
     </div>

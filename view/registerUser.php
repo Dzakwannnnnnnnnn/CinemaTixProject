@@ -1,9 +1,30 @@
+<?php
+include 'koneksi.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = $_POST['nama'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $no_hp = $_POST['no_hp'];
+    $role = 'user';
+
+    $sql = "INSERT INTO users (nama, email, password, no_hp, role)
+            VALUES ('$nama', '$email', '$password', '$no_hp', '$role')";
+
+    if (mysqli_query($conn, $sql)) {
+        echo "<script>alert('Registrasi berhasil! Silakan login.'); window.location='login.html';</script>";
+    } else {
+        echo "<script>alert('Terjadi kesalahan, coba lagi.'); window.location='register.html';</script>";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cinematix | Login</title>
+  <title>Cinematix | Daftar</title>
   <link rel="icon" type="image/png" href="tix_logo.png">
   <style>
     * {
@@ -71,8 +92,8 @@
       color: #111;
     }
 
-    /* Login Section */
-    .login-section {
+    /* Register Section */
+    .register-section {
       flex: 1;
       display: flex;
       align-items: center;
@@ -80,29 +101,29 @@
       padding: 120px 20px 60px;
     }
 
-    .login-box {
+    .register-box {
       background-color: #111;
       padding: 40px 50px;
       border-radius: 12px;
       box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       text-align: center;
     }
 
-    .login-box h2 {
+    .register-box h2 {
       color: #ffcc00;
       margin-bottom: 25px;
     }
 
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       text-align: left;
     }
 
     .input-group label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-size: 14px;
       color: #ddd;
     }
@@ -132,61 +153,13 @@
       cursor: pointer;
       width: 100%;
       transition: 0.3s;
+      margin-top: 10px;
     }
 
     .btn-submit:hover {
       background-color: #ffd633;
     }
 
-    .login-footer {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #ccc;
-    }
-
-    .login-footer a {
-      color: #ffcc00;
-      text-decoration: none;
-    }
-
-    .login-footer a:hover {
-      text-decoration: underline;
-    }
-
-    /* Google Button */
-    .btn-google {
-      margin-top: 15px;
-      width: 100%;
-      background-color: #222;
-      border: 1px solid #333;
-      color: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn-google:hover {
-      background-color: #333;
-      border-color: #ffcc00;
-      color: #ffcc00;
-    }
-
-    .forgot-password {
-      text-align: right;
-      margin-bottom: 15px;
-    }
-
-    .forgot-password a {
-      font-size: 13px;
-      color: #ccc;
-      text-decoration: none;
-    }
-
-    .forgot-password a:hover {
-      color: #ffcc00;
-    }
     .register-footer {
       margin-top: 15px;
       font-size: 14px;
@@ -196,6 +169,10 @@
     .register-footer a {
       color: #ffcc00;
       text-decoration: none;
+    }
+
+    .register-footer a:hover {
+      text-decoration: underline;
     }
 
   </style>
@@ -212,34 +189,42 @@
         <li><a href="#">Berita & Event</a></li>
       </ul>
     </nav>
-    <a href="login.html" class="btn-login">Masuk / Daftar</a>
+    <a href="login.html" class="btn-login">Masuk</a>
   </header>
 
-  <!-- Login Section -->
-  <section class="login-section">
-    <div class="login-box">
-      <h2>Masuk ke Akun</h2>
+  <!-- Register Section -->
+  <section class="register-section">
+    <div class="register-box">
+      <h2>Buat Akun Baru</h2>
 
-      <form action="proses_login.php" method="POST">
+      <form action="proses_register.php" method="POST">
+        <div class="input-group">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+        </div>
+
         <div class="input-group">
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="Masukkan email" required>
+          <input type="email" id="email" name="email" placeholder="Masukkan email aktif" required>
         </div>
 
         <div class="input-group">
           <label for="password">Kata Sandi</label>
-          <input type="password" id="password" name="password" placeholder="Masukkan kata sandi" required>
+          <input type="password" id="password" name="password" placeholder="Buat kata sandi" required>
         </div>
 
-        <div class="forgot-password">
-          <a href="#">Lupa kata sandi?</a>
+        <div class="input-group">
+          <label for="no_hp">No. Handphone</label>
+          <input type="text" id="no_hp" name="no_hp" placeholder="Masukkan nomor HP" required>
         </div>
 
-        <button type="submit" class="btn-submit">Masuk</button><br><br>
-        <div class="register-footer">
-          <p>Belum punya akun? <a href="registerUser.php">Daftar di sini</a></p>
-        </div>
+        <button type="submit" class="btn-submit">Daftar Sekarang</button>
       </form>
 
-      <div class="login-footer">
-        <p
+      <div class="register-footer">
+        <p>Sudah punya akun? <a href="loginUser.php">Masuk di sini</a></p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
