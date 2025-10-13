@@ -1,6 +1,6 @@
 <?php
 // koneksi.php dengan error handling yang better
-$host = "192.168.1.6";
+$host = "localhost";
 $user = "cinematik_user"; // ← PERHATIKAN: cinematik_user BUKAN cinematic_user
 $pass = "password123";
 $db = "cinematicket";

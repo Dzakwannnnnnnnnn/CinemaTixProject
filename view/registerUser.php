@@ -206,7 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
   <!-- Navbar -->
   <header class="navbar">
-    <div class="logo">Cinematix</div>
+    <div class="logo" onclick="window.location.href='index.php'" style="cursor:pointer;">Cinematix</div>
     <nav>
       <ul class="nav-links">
         <li><a href="index.php">Home</a></li>

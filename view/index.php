@@ -68,13 +68,21 @@ body {
   color: #111;
 }
 
+
 .hero {
   height: 100vh;
-  background-color: #000;
   display: flex;
   align-items: center;
   padding: 0 80px;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+    url('Stranger things 1920x1080.jpeg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
 }
+
 
 .hero-content {
   max-width: 600px;
@@ -110,7 +118,7 @@ body {
 </style>
 <body>
   <header class="navbar">
-    <div class="logo">Cinematix</div>
+    <div class="logo" onclick="window.location.href='index.php'" style="cursor:pointer;">Cinematix</div>
     <nav>
       <ul class="nav-links">
         <li><a href="#">Home</a></li>

@@ -203,7 +203,7 @@
 <body>
   <!-- Navbar -->
   <header class="navbar">
-    <div class="logo">Cinematix</div>
+    <div class="logo" onclick="window.location.href='index.php'" style="cursor:pointer;">Cinematix</div>
     <nav>
       <ul class="nav-links">
         <li><a href="#">Home</a></li>
@@ -220,7 +220,7 @@
     <div class="login-box">
       <h2>Masuk ke Akun</h2>
 
-      <form action="proses_login.php" method="POST">
+      <form action="profil.php" method="POST">
         <div class="input-group">
           <label for="email">Email</label>
           <input type="email" id="email" name="email" placeholder="Masukkan email" required>
