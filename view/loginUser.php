@@ -206,7 +206,7 @@
     <div class="logo" onclick="window.location.href='index.php'" style="cursor:pointer;">Cinematix</div>
     <nav>
       <ul class="nav-links">
-        <li><a href="#">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li><a href="#">Pemesanan Tiket</a></li>
         <li><a href="#">Sedang Tayang</a></li>
         <li><a href="#">Berita & Event</a></li>
