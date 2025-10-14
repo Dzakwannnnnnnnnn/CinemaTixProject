@@ -1,112 +1,173 @@
 <?php
-include_once("/koneksi.php");
+include 'koneksi.php';
 
-// Proses form
 if (isset($_POST['submit'])) {
-  $judul = $_POST['judul'];
-  $genre = $_POST['genre'];
-  $durasi = $_POST['durasi'];
-  $rating_usia = $_POST['rating_usia'];
-  $poster = $_POST['poster'];
+    $judul = mysqli_real_escape_string($conn, $_POST['judul']);
+    $genre = mysqli_real_escape_string($conn, $_POST['genre']);
+    $durasi = mysqli_real_escape_string($conn, $_POST['durasi']);
+    $rating_usia = mysqli_real_escape_string($conn, $_POST['rating_usia']);
 
-  $query = "INSERT INTO film (judul, genre, durasi, rating_usia, poster) 
-            VALUES ('$judul', '$genre', '$durasi', '$rating_usia', '$poster')";
-  
-  if (mysqli_query($mysqli, $query)) {
-    echo "<div class='status success'>✅ Data film berhasil ditambahkan!</div>";
-  } else {
-    echo "<div class='status failed'>❌ Gagal menambahkan data: " . mysqli_error($mysqli) . "</div>";
-  }
+    $poster_name = null;
+    if (isset($_FILES['poster']) && $_FILES['poster']['error'] === 0) {
+        $poster_name = time() . "_" . basename($_FILES['poster']['name']);
+        $poster_tmp = $_FILES['poster']['tmp_name'];
+        $poster_path = "../uploads/" . $poster_name;
+
+        if (!file_exists('../uploads')) {
+            mkdir('../uploads', 0777, true);
+        }
+
+        move_uploaded_file($poster_tmp, $poster_path);
+    }
+
+    $query = "INSERT INTO film (judul, genre, durasi, rating_usia, poster_url)
+              VALUES ('$judul', '$genre', '$durasi', '$rating_usia', '$poster_name')";
+
+    if (mysqli_query($conn, $query)) {
+        echo "<script>
+                alert('Data film berhasil ditambahkan!');
+                window.location.href='panelAdmin.php';
+              </script>";
+    } else {
+        echo "Error: " . mysqli_error($conn);
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Tambah Film - CinemaTix Admin</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Tambah Film | Admin CinemaTix</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
-    .status {
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #212529;
+      color: #fff;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding: 20px;
+    }
+
+    .sidebar h4 {
       text-align: center;
-      padding: 10px 15px;
-      margin: 0;
-      font-weight: 600;
-      font-size: 14px;
+      margin-bottom: 30px;
     }
-    .status.success {
-      background-color: #d1f7d1;
-      color: #1b5e20;
-      border-bottom: 2px solid #43a047;
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
     }
-    .status.failed {
-      background-color: #ffd6d6;
-      color: #b71c1c;
-      border-bottom: 2px solid #e53935;
+
+    .sidebar ul li {
+      margin: 15px 0;
     }
-    .form-card {
-      max-width: 600px;
-      margin: 50px auto;
-      background: #fff;
+
+    .sidebar ul li a {
+      color: #ddd;
+      text-decoration: none;
+      display: block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: 0.3s;
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #0d6efd;
+      color: #fff;
+    }
+
+    .content {
+      margin-left: 270px;
+      padding: 40px;
+    }
+
+    .card {
+      border: none;
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary {
+      background-color: #0d6efd;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #0b5ed7;
     }
   </style>
 </head>
 <body>
-  <div class="d-flex">
-    <!-- Sidebar -->
-    <nav class="bg-dark text-white p-3" style="width: 250px; height: 100vh;">
-      <h4 class="text-center">🎬 Admin CinemaTix</h4>
-      <ul class="nav flex-column mt-4">
-        <li class="nav-item"><a href="dashboard.php" class="nav-link text-white">Dashboard</a></li>
-        <li class="nav-item"><a href="users.php" class="nav-link text-white">Users</a></li>
-        <li class="nav-item"><a href="film.php" class="nav-link text-white">Film</a></li>
-        <li class="nav-item"><a href="studio.php" class="nav-link text-white">Studio</a></li>
-        <li class="nav-item"><a href="kursi.php" class="nav-link text-white">Kursi</a></li>
-        <li class="nav-item"><a href="jadwal.php" class="nav-link text-white">Jadwal</a></li>
-        <li class="nav-item"><a href="booking.php" class="nav-link text-white">Booking</a></li>
-        <li class="nav-item"><a href="pembayaran.php" class="nav-link text-white">Pembayaran</a></li>
-      </ul>
-    </nav>
 
-    <div class="container-fluid p-4">
-      <h2>Tambah Film</h2>
-      <p>Isi form di bawah untuk menambahkan film baru ke database CinemaTix.</p>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4><i class="bi bi-film"></i> Admin<br>CinemaTix</h4>
+    <ul>
+      <li><a href="Dashboard.php"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+      <li><a href="Users.php"><i class="bi bi-people"></i> Users</a></li>
+      <li><a href="DaftarFilm.php" class="active"><i class="bi bi-camera-reels"></i> Film</a></li>
+      <li><a href="Studio.php"><i class="bi bi-building"></i> Studio</a></li>
+      <li><a href="Kursi.php"><i class="bi bi-grid-3x3-gap"></i> Kursi</a></li>
+      <li><a href="Jadwal.php"><i class="bi bi-calendar-event"></i> Jadwal</a></li>
+      <li><a href="Booking.php"><i class="bi bi-ticket-perforated"></i> Booking</a></li>
+      <li><a href="Pembayaran.php"><i class="bi bi-wallet2"></i> Pembayaran</a></li>
+    </ul>
+  </div>
 
-      <div class="form-card">
-        <form method="post" action="">
-          <div class="mb-3">
-            <label for="judul" class="form-label">Judul Film</label>
-            <input type="text" class="form-control" id="judul" name="judul" required>
-          </div>
-          <div class="mb-3">
-            <label for="genre" class="form-label">Genre</label>
-            <input type="text" class="form-control" id="genre" name="genre" required>
-          </div>
-          <div class="mb-3">
-            <label for="durasi" class="form-label">Durasi (menit)</label>
-            <input type="number" class="form-control" id="durasi" name="durasi" required>
-          </div>
-          <div class="mb-3">
-            <label for="rating_usia" class="form-label">Rating Usia</label>
-            <select class="form-select" id="rating_usia" name="rating_usia" required>
-              <option value="">-- Pilih Rating --</option>
-              <option>SU</option>
-              <option>13+</option>
-              <option>17+</option>
-              <option>21+</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="poster" class="form-label">URL Poster</label>
-            <input type="text" class="form-control" id="poster" name="poster" placeholder="https://example.com/poster.jpg">
-          </div>
-          <button type="submit" name="submit" class="btn btn-primary">Simpan</button>
-          <a href="panelAdmin.php" class="btn btn-secondary">Kembali</a>
-        </form>
-      </div>
+  <!-- Content -->
+  <div class="content">
+    <h2 class="fw-bold mb-3">Tambah Film</h2>
+    <p class="text-muted mb-4">Isi data film baru untuk ditambahkan ke database CinemaTix.</p>
+
+    <div class="card p-4">
+      <form action="" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Judul Film</label>
+          <input type="text" name="judul" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Genre</label>
+          <input type="text" name="genre" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Durasi (menit)</label>
+          <input type="number" name="durasi" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Rating Usia</label>
+          <select name="rating_usia" class="form-select" required>
+            <option value="">-- Pilih Rating Usia --</option>
+            <option value="SU">SU (Semua Umur)</option>
+            <option value="13+">13+</option>
+            <option value="17+">17+</option>
+            <option value="21+">21+</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Poster Film (opsional)</label>
+          <input type="file" name="poster" class="form-control">
+        </div>
+
+        <button type="submit" name="submit" class="btn btn-primary w-100 mt-2">
+          <i class="bi bi-plus-circle"></i> Tambah Film
+        </button>
+      </form>
     </div>
   </div>
+
 </body>
 </html>
