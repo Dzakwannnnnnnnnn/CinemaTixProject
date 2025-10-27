@@ -72,7 +72,8 @@ if (!$hasil) {
                     </td>
                     <td>
                       <a href="edit.php?id=<?= $film['film_id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                      <a href="hapus.php?id=<?= $film['film_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus film ini?')">Hapus</a>
+                      <a href="hapus.php?id=<?= $film['film_id'] ?>" 
+                        class="btn btn-danger btn-sm">Hapus</a>
                     </td>
                   </tr>
                 <?php endwhile; ?>
