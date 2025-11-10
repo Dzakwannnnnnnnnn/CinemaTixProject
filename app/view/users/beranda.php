@@ -1,5 +1,9 @@
+<?php
+require "/../app/view/users/index.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,7 +142,7 @@
     /* SECTION & GRID */
     .section {
       padding: 48px 0;
-      border-top: 1px solid rgba(255,255,255,0.02);
+      border-top: 1px solid rgba(255, 255, 255, 0.02);
       margin: 50px;
     }
 
@@ -156,16 +160,16 @@
     }
 
     .movie-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.03));
       border-radius: 12px;
       overflow: hidden;
       transition: transform .22s ease, box-shadow .22s ease;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.45);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
     }
 
     .movie-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
     }
 
     .poster {
@@ -193,7 +197,9 @@
       gap: 10px;
     }
 
-    .rating { color: #ffcc00; }
+    .rating {
+      color: #ffcc00;
+    }
 
     .news-grid {
       display: grid;
@@ -258,7 +264,9 @@
       margin-bottom: 10px;
     }
 
-    .step-title { font-weight: 700; }
+    .step-title {
+      font-weight: 700;
+    }
 
     /* FOOTER */
     .site-footer {
@@ -282,9 +290,19 @@
     }
 
     @keyframes footer-shine {
-      0% { left: -100%; opacity: 0; }
-      50% { opacity: 1; }
-      100% { left: 100%; opacity: 0; }
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
     }
 
     .footer-inner {
@@ -350,9 +368,17 @@
 
     /* RESPONSIVE */
     @media (max-width: 1100px) {
-      .movies-grid { grid-template-columns: repeat(2, 1fr); }
-      .news-grid { grid-template-columns: repeat(2, 1fr); }
-      .hero h1 { font-size: 36px; }
+      .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .news-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -379,7 +405,7 @@
       }
 
       .nav-links li {
-        border-top: 1px solid rgba(255,255,255,0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding: 14px 0;
       }
 
@@ -391,7 +417,8 @@
         display: none;
       }
 
-      .movies-grid, .news-grid {
+      .movies-grid,
+      .news-grid {
         grid-template-columns: 1fr;
       }
 
@@ -410,7 +437,6 @@
         justify-content: center;
       }
     }
-
   </style>
 </head>
 
@@ -444,38 +470,58 @@
   <main class="container">
     <section id="movies" class="section">
       <h2 class="section-title">Film Sedang Tayang</h2>
-      <div class="movies-grid">
-        <article class="movie-card">
-          <div class="poster" style="background-image:url('venom.jpg')"></div>
-          <div class="movie-meta"><h3>Venom: The Last Dance</h3><div class="sub">Aksi <span class="rating">★★★★☆</span></div></div>
-        </article>
-        <article class="movie-card">
-          <div class="poster" style="background-image:url('interstellar.jpg')"></div>
-          <div class="movie-meta"><h3>Interstellar</h3><div class="sub">Sci-Fi <span class="rating">★★★★☆</span></div></div>
-        </article>
-        <article class="movie-card">
-          <div class="poster" style="background-image:url('haikyu.jpg')"></div>
-          <div class="movie-meta"><h3>Haikyuu!! The Dumpster Battle</h3><div class="sub">Animasi <span class="rating">★★★★☆</span></div></div>
-        </article>
-      </div>
+      <?php foreach ($data as $row): ?>
+        <div class="movies-grid">
+          <article class="movie-card">
+            <img src="/../../public/uploads/<?= htmlspecialchars($row['poster_url']); ?>"
+              alt="Foto <?= htmlspecialchars($row['name']); ?>">
+            <div class="movie-meta">
+              <h3><?= htmlspecialchars($row['judul']); ?></h3>
+              <div class="genre"><?= htmlspecialchars($row['judul']); ?></div>
+              <p><?= htmlspecialchars($row['rating_usia']); ?></p>
+            </div>
+          </article>
+        </div>
+      <?php endforeach; ?>
     </section>
 
     <section id="news" class="section">
       <h2 class="section-title">Berita & Event</h2>
       <div class="news-grid">
-        <article class="news-card"><img src="venom.jpg"><h4>Deadpool & Wolverine Raih Antusiasme Tinggi</h4><p>Marvel kembali menarik perhatian para penggemar dengan aksi penuh kejutan.</p></article>
-        <article class="news-card"><img src="avatar.jpg"><h4>Inside Out 2: Animasi Menyentuh Hati</h4><p>Film animasi yang menyentuh penonton dari segala usia.</p></article>
-        <article class="news-card"><img src="openhimer.webp"><h4>Festival Sinema Dunia Akan Digelar</h4><p>Menampilkan karya-karya luar biasa dari seluruh dunia.</p></article>
+        <article class="news-card"><img src="venom.jpg">
+          <h4>Deadpool & Wolverine Raih Antusiasme Tinggi</h4>
+          <p>Marvel kembali menarik perhatian para penggemar dengan aksi penuh kejutan.</p>
+        </article>
+        <article class="news-card"><img src="avatar.jpg">
+          <h4>Inside Out 2: Animasi Menyentuh Hati</h4>
+          <p>Film animasi yang menyentuh penonton dari segala usia.</p>
+        </article>
+        <article class="news-card"><img src="openhimer.webp">
+          <h4>Festival Sinema Dunia Akan Digelar</h4>
+          <p>Menampilkan karya-karya luar biasa dari seluruh dunia.</p>
+        </article>
       </div>
     </section>
 
     <section class="section howto">
       <h2 class="section-title">Cara Pesan Tiket</h2>
       <div class="steps">
-        <div class="step"><div class="step-icon">1</div><div class="step-title">Pilih Film</div></div>
-        <div class="step"><div class="step-icon">2</div><div class="step-title">Pilih Kursi</div></div>
-        <div class="step"><div class="step-icon">3</div><div class="step-title">Bayar</div></div>
-        <div class="step"><div class="step-icon">4</div><div class="step-title">Dapatkan E-Ticket</div></div>
+        <div class="step">
+          <div class="step-icon">1</div>
+          <div class="step-title">Pilih Film</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">2</div>
+          <div class="step-title">Pilih Kursi</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">3</div>
+          <div class="step-title">Bayar</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">4</div>
+          <div class="step-title">Dapatkan E-Ticket</div>
+        </div>
       </div>
     </section>
   </main>
@@ -506,7 +552,7 @@
   <script>
     // Slideshow background
     const hero = document.getElementById("hero");
-    const images = ["Stranger things 1920x1080.jpeg","dune.jpg","star.jpg","openhimer.webp"];
+    const images = ["/../public/uploads/dune.jpg", "/../public/uploads/avatar.jpg", "/../public/uploads/openhimer.webpxz"];
     let current = 0;
     function changeBackground() {
       hero.style.backgroundImage = `url('${images[current]}')`;
@@ -524,4 +570,5 @@
     });
   </script>
 </body>
+
 </html>
